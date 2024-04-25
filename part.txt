@@ -1,6 +1,6 @@
-price (s_j)         preorder cost (b_j)
-5                   10
-4                   20
-3                   30
-2                   40
-1                   50
+price (sj)         preorder cost (bj)
+4                  11
+5                  10
+3                  8
+2                  7
+1                  6

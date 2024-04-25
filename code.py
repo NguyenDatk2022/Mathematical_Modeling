@@ -4,153 +4,136 @@ import numpy as np
 from gamspy import *
 from scipy.stats import binom
 
-k_values = list(range(11))
+values = list(range(11))
 distribution = []
-for k in k_values:
+for k in values:
     distribution.append(binom.pmf(k, 10, 0.5))
 
-require_data_frame = []
-lines = open("require_matrix.txt").readlines()
+requiredDataFrame = []
+lines = open("matrix.txt").readlines()
 for line in lines:
-    num = line.split()
-    arr = []
-    for s in num:
-        arr.append(int(s))
-    require_data_frame.append(arr)
+    number = line.split()
+    array = []
+    for i in number:
+        array.append(int(i))
+    requiredDataFrame.append(array)
 
-require_data = []
+requiredData = []
 for i in range(8):
     for j in range(5):
-        prod_str = "product_" + str(i+1)
-        part_str = "part_" + str(j+1)
-        require_data.append([prod_str, part_str, require_data_frame[i][j]])
+        product = "product" + str(i+1)
+        part = "part" + str(j+1)
+        requiredData.append([product, part, requiredDataFrame[i][j]])
 
-require_matrix = pd.DataFrame(
-    require_data,
+matrix = pd.DataFrame(
+    requiredData,
     columns=["product", "part", "require"]
 ).set_index(["product", "part"])
 
 demand = []
-
 demand.append(
     pd.DataFrame(
-        [["product_1", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_2", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_3", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_4", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_5", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_6", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_7", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_8", np.random.choice(np.arange(0,11), p=distribution)]],
-        columns=["product", "demand_1"]
+        [["product1", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product2", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product3", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product4", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product5", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product6", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product7", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product8", np.random.choice(np.arange(0,11), p=distribution)]],
+        columns=["product", "demand1"]
     ).set_index("product")
 )
 
 demand.append(
     pd.DataFrame(
-        [["product_1", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_2", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_3", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_4", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_5", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_6", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_7", np.random.choice(np.arange(0,11), p=distribution)],
-        ["product_8", np.random.choice(np.arange(0,11), p=distribution)]],
-        columns=["product", "demand_2"]
+        [["product1", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product2", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product3", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product4", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product5", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product6", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product7", np.random.choice(np.arange(0,11), p=distribution)],
+        ["product8", np.random.choice(np.arange(0,11), p=distribution)]],
+        columns=["product", "demand2"]
     ).set_index("product")
 )
 
-product_cost_data = []
-product_price_data = []
-
-
+productCostData = []
+productSellingPriceData = []
 lines = open("product.txt").readlines()
 for i in range (1, 9):
     line = lines[i].split()
-    product_cost_data.append(["product_" + str(i), int(line[0])])
-    product_price_data.append(["product_" + str(i), int(line[1])])
+    productCostData.append(["product" + str(i), int(line[0])])
+    productSellingPriceData.append(["product" + str(i), int(line[1])])
 
-
-product_cost = pd.DataFrame(
-    product_cost_data,
-    columns=["product", "cost\n(l_i)"]
+productCost = pd.DataFrame(
+    productCostData,
+    columns=["product", "cost (li)"]
 ).set_index("product")
 
-
-product_selling_price = pd.DataFrame(
-    product_price_data,
-    columns=["product", "selling price\n(q_i)"]
+productSellingPrice = pd.DataFrame(
+    productSellingPriceData,
+    columns=["product", "selling price (qi)"]
 ).set_index("product")
 
-
-part_price_data = []
-preorder_cost_part_data = []
-
-
-
+partPriceData = []
+preorderPartCostData = []
 lines = open("part.txt").readlines()
 for j in range (1,6):
-    part_price_data.append(["part_"+str(j), int(lines[j].split()[0])])
-    preorder_cost_part_data.append(["part_"+str(j), int(lines[j].split()[1])])
+    line = lines[j].split()
+    partPriceData.append(["part"+str(j), int(line[0])])
+    preorderPartCostData.append(["part"+str(j), int(line[1])])
 
-
-part_selling_price = pd.DataFrame(
-    part_price_data,
-    columns=["part", "selling price\n(s_j)"]
+partSellingPrice = pd.DataFrame(
+    partPriceData,
+    columns=["part", "selling price (sj)"]
 ).set_index("part")
 
-preorder_cost = pd.DataFrame(
-    preorder_cost_part_data,
-    columns=["part", "preorder cost\n(b_j)"]
+preorderPartCost = pd.DataFrame(
+    preorderPartCostData,
+    columns=["part", "preorder cost (bj)"]
 ).set_index("part")
 
 S = len(demand)
 
-
 m = Container()
-
-i = Set(m, "i", description="product", records=product_selling_price.index)
-j = Set(m, "j", description="part", records=part_selling_price.index)
-
+i = Set(m, "i", description="product", records=productSellingPrice.index)
+j = Set(m, "j", description="part", records=partSellingPrice.index)
 A = Parameter(
     container=m,
     name="A",
-    description="require matrix",
-    domain=[i, j],
-    records=require_matrix.reset_index(),
+    description="matrix",
+    domain=[i,j],
+    records=matrix.reset_index(),
 )
 d = [None]*S
 for scenerio in range(S):
-    d[scenerio] = Parameter(m, "d_" + str(scenerio), domain=i, description="demand", records=demand[scenerio].reset_index())
-
-l = Parameter(m, "l", domain=i, description="product cost", records=product_cost.reset_index())
-q = Parameter(m, "q", domain=i, description="product selling price", records=product_selling_price.reset_index())
-s = Parameter(m, "s", domain=j, description="part selling price", records=part_selling_price.reset_index())
-b = Parameter(m, "b", domain=j, description="preorder cost per part", records=preorder_cost.reset_index())
-
+    d[scenerio] = Parameter(m, "d" + str(scenerio), domain=i, description="demand", records=demand[scenerio].reset_index())
+l = Parameter(m, "l", domain=i, description="product cost", records=productCost.reset_index())
+q = Parameter(m, "q", domain=i, description="product selling price", records=productSellingPrice.reset_index())
+s = Parameter(m, "s", domain=j, description="part selling price", records=partSellingPrice.reset_index())
+b = Parameter(m, "b", domain=j, description="preorder cost per part", records=preorderPartCost.reset_index())
 x = Variable(m, "x", type="Positive", domain=j)
 y = [None]*S
 z = [None]*S
-
 require = [None]*S
-demand_constraint = [None]*S
-
+demandConstraint = [None]*S
 obj = Sum(j, x[j]*b[j])
-
 for scenerio in range(S):
     y[scenerio] = Variable(m, "y" + str(scenerio), type="Positive", domain=j)
     z[scenerio] = Variable(m, "z" + str(scenerio), type="Positive", domain=i)
     require[scenerio] = Equation(
         m, "require" + str(scenerio),
-        domain=j, description="require of part j to product i"
+        domain=j, description="require number of parts j to product i"
     )
     require[scenerio][j] = y[scenerio][j] == x[j] - Sum(i, A[i,j]*z[scenerio][i])
 
-    demand_constraint[scenerio] = Equation(
+    demandConstraint[scenerio] = Equation(
         m, "demand" + str(scenerio),
         domain=i, description="Demand for each product"
     )
-    demand_constraint[scenerio][i] = z[scenerio][i] <= d[scenerio][i]
+    demandConstraint[scenerio][i] = z[scenerio][i] <= d[scenerio][i]
 
     obj += 0.5*Sum(i, (l[i]-q[i])*z[scenerio][i]) - 0.5*Sum(j, s[j]*y[scenerio][j])
 
